@@ -1,0 +1,22 @@
+{% extends 'base_manager.html' %}
+{% block main_content %}
+
+<div class="card border-0">
+    <div class="card-body">
+        <div class="card-title">
+            <h1>Update Restaurant</h1>
+        </div>
+    </div>
+    <div class="card-body">
+        <form action="" method="post">
+            {%csrf_token%}
+            <table class="table">
+                {{ restaurant_form.as_table }}
+            </table>
+            <input type="submit" value="Update Restaurant" class="btn btn-primary">
+            <a href="{% url 'restaurants_detail' restaurant.id %}">Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

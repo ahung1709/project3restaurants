@@ -1,0 +1,21 @@
+{% extends 'base_manager.html' %}
+{% block main_content %}
+    {% if object %}
+        <h1>Edit <span>{{ object.name }}</span></h1>
+    {% else %}
+        <h1>Add Restaurant</h1>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        
+        <table class="table">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit!">
+        {% if object %}
+            <a href="{% url 'restaurants_detail' restaurant.id %}">Cancel</a>
+        {% else %}
+            <a href="{% url 'restaurants_index' %}">Cancel</a>
+        {% endif %}
+    </form>
+{% endblock %}
