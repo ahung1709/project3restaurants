@@ -1,0 +1,44 @@
+{% extends 'base_manager.html' %}
+{% block main_content %}
+
+<!-- % include 'restaurants/restaurants_display.html' %} -->
+<!-- % include 'restaurants/display_restaurants.html' %} -->
+
+<div class="row m-2">
+    {% if public_page %}
+        <div>
+            <h1>View All Restaurants</h1>
+        </div>
+    {% else %}
+        <div>
+            <h1>My Restaurants</h1>
+            <a class="btn btn-primary" href="{% url 'restaurants_create' %}">Add Restaurant</a>
+        </div>
+        
+    {% endif %}
+</div>
+<div class="row m-2">
+    {% for restaurant in restaurants %}
+        <div class="card" style="width: 50rem;">
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="..." class="card-img-top" alt="...">
+                </div>
+                <div class="col-md-9">
+                    <div class="card-body">
+                        <h5 class="card-title">Name: {{ restaurant.name }}</h5>
+                        <p class="card-text">Location: {{ restaurant.location }}</p>
+                        <p class="card-text">Hours: {{ restaurant.hours }}</p>
+                        {% if public_page %}
+                            <a class="btn btn-success" href="{% url 'all_restaurants_detail' restaurant.id %}">Detail</a>
+                        {% else %}
+                            <a class="btn btn-success" href="{% url 'restaurants_detail' restaurant.id %}">Detail</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
