@@ -1,0 +1,35 @@
+{% extends 'users/base.html' %}
+{% block main_content %}
+
+<h1>Profile</h1>
+<table class="table">
+
+    <tbody>
+        <tr>
+            <th scope="row">User ID</th>
+            <td>{{ user.id }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Username</th>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <th scope="row">First name</th>
+            
+            <td>{{ user.first_name }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Last name</th>
+            <td>{{ user.last_name }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+    </tbody>
+</table>
+<a class="btn btn-primary" href="{% url 'user_update' %}">Edit</a>
+<!-- <a href="% url 'user_update' user.id %}">Edit</a> -->
+<a class="btn btn-danger" href="{% url 'user_delete_confirm' %}">Delete</a>
+
+{% endblock %}

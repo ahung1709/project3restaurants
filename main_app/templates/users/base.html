@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row flex-nowrap min-vh-100" style="width:100%;">
+    <!-- <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh"> -->
+
+    <div class="col-2 flex-shrink-0 p-3 text-white bg-dark">
+        <nav class="nav flex-column">
+            <a class="nav-link active" aria-current="page" href="{% url 'user_profile' %}">Profile</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'password_change' %}">Change password</a>
+        </nav>
+    </div>
+
+    <div class="col-10">
+        {% block main_content %}
+        {% endblock %}
+    </div>
+</div>
+
+{% endblock %}
