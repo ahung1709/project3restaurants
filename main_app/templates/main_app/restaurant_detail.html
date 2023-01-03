@@ -23,13 +23,23 @@
                         <td><p>{{ restaurant.location }}</p></td>
                     </tr>
                     <tr>
+                        <th scope="row">Profile picture</th>
+                        <td><img src="{{ restaurant.profile_pic }}" width="500"></td>
+                    </tr>
+                    <tr>
                         <th scope="row">Menu</th>
-                        <td><p>{{ restaurant.menu }}</p></td>
+                        <td><p>{{ restaurant.menu|linebreaksbr }}</p></td>
                     </tr>
                     <tr>
                         <th scope="row">Hours</th>
-                        <td><p>{{ restaurant.hours }}</p></td>
+                        <td><p>{{ restaurant.hours|linebreaksbr }}</p></td>
                     </tr>
+                    {% if not public_page %}
+                    <tr>
+                        <th scope="row">Published</th>
+                        <td><input class="form-check-input" type="checkbox" {{ restaurant.published|yesno:"checked,," }} disabled></td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>

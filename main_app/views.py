@@ -35,7 +35,8 @@ def about(request):
 ### Restaurants views ###
 
 def all_restaurants_index(request):
-    restaurants = Restaurant.objects.all()
+    # restaurants = Restaurant.objects.all()
+    restaurants = Restaurant.objects.filter(published=True).order_by('id')
     context = { "restaurants": restaurants, "public_page": True }
     return render(request, 'restaurants/index.html', context)
 
@@ -47,7 +48,7 @@ def all_restaurants_detail(request, restaurant_id):
 
 @login_required
 def restaurants_index(request):
-    restaurants = Restaurant.objects.filter(user=request.user)
+    restaurants = Restaurant.objects.filter(user=request.user).order_by('id')
     # You could also retrieve the logged in user's restaurants like this
     # restaurants = request.user.restaurant_set.all()
     context = { "restaurants": restaurants, "public_page": False }
@@ -59,7 +60,7 @@ class RestaurantDetail(LoginRequiredMixin, DetailView):
 
 class RestaurantCreate(LoginRequiredMixin, CreateView):
     model = Restaurant
-    fields = ['name', 'location', 'menu', 'hours']
+    fields = ['name', 'profile_pic', 'location', 'menu', 'hours', 'published']
 
     # This inherited method is called when a
     # valid restaurant is being submitted
