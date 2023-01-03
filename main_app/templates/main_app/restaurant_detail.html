@@ -69,6 +69,14 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <form action="{%url 'create-favourite' restaurant.id %}"method = 'POST'>
+                {%csrf_token%}
+    
+            <div>
+                <input type="submit" class="btn btn-outline-primary" value="Add to favorites">
+               
+            </div>
+            </form>
         </div>
         {% if not public_page %}
             <div class="card-body">

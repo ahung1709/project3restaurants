@@ -1,0 +1,13 @@
+{%extends 'favourites/base.html'%} {% block main_content %} 
+<h1>Delete Favorite</h1>
+
+<h4>Are you sure you want to delete <span>{{ object.name }}</span></h4>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input class="btn btn-danger" type="submit" value="Yes - Delete!">
+    <a href="{% url 'favorites'  %}">Cancel</a>
+</form>
+
+
+{% endblock %}
