@@ -1,7 +1,7 @@
 # from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Restaurant
+from .models import Restaurant, Review
 
 class UpdateUserForm(forms.ModelForm):
     first_name = forms.CharField(max_length=150, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -20,3 +20,8 @@ class UpdateRestaurantForm(forms.ModelForm):
     class Meta:
         model = Restaurant
         fields = ['name', 'location', 'menu', 'hours']
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['content', 'rating']
