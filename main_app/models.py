@@ -4,15 +4,14 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
 class Favorite(models.Model):
     title = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    # def __str__(self):
-    #     return self.title
+    def __str__(self):
+        return self.title
 
-    # def get_absolute_url(self):
-    #     return reverse('favorites_detail', kwargs={'pk': self.id})
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=50)
@@ -26,10 +25,11 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def get_absolute_url(self):
         return reverse('restaurants_detail', kwargs={'pk': self.id})
         # return reverse('restaurants_detail', kwargs={'restaurant_id': self.id})
+
 
 class Review(models.Model):
     content = models.CharField(max_length=250)
@@ -39,3 +39,4 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.restaurant} has a rating {self.rating} with review: {self.content}"
+

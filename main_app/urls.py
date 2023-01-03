@@ -6,9 +6,9 @@ from . import views
 # from users.views import ChangePasswordView
 
 urlpatterns = [
-    path('', views.front, name='front'), 
-    # path('', views.home, name='home'), 
-    path('about/', views.about, name='about'), 
+    path('', views.front, name='front'),
+    # path('', views.home, name='home'),
+    path('about/', views.about, name='about'),
 
     ### Restaurant routes ###
 
@@ -23,15 +23,29 @@ urlpatterns = [
     path('restaurants/<int:restaurant_id>/add_review/', views.add_review, name='add_review'),
 
     ### Account routes ###
-    path('accounts/signup/', views.signup, name='signup'), 
+    path('accounts/signup/', views.signup, name='signup'),
 
-    path('accounts/profile/', views.user_profile, name='user_profile'), 
-    path('accounts/update/', views.user_update, name='user_update'), 
-    path('accounts/delete/', views.user_delete_confirm, name='user_delete_confirm'), 
+    path('accounts/profile/', views.user_profile, name='user_profile'),
+    path('accounts/update/', views.user_update, name='user_update'),
+    path('accounts/delete/', views.user_delete_confirm,
+         name='user_delete_confirm'),
 
-    path('accounts/password_change/', views.ChangePasswordView.as_view(), name='password_change'),
-    path('accounts/password_change_done/', views.pwd_change_done, name='pwd_change_done'), 
+    path('accounts/password_change/',
+         views.ChangePasswordView.as_view(), name='password_change'),
+    path('accounts/password_change_done/',
+         views.pwd_change_done, name='pwd_change_done'),
 
     ### Testing routes ###
-    path('testing/', views.testing, name='testing'), 
+    path('testing/', views.testing, name='testing'),
+
+
+    # favorites
+    path('favorites/', views.ListFavorites.as_view(), name='favorites'),
+    path('restaurants/<int:restaurant_id>/favorites/create/',
+         views.CreateView.as_view(), name='create-favourite'),
+
+    path('restaurants/<int:pk>/favorites/delete/<int:favorite_pk>/',
+         views.FavoriteDelete.as_view(),  name='favorite-delete'),
+    path('restaurants/<int:pk>/favorites/update/<int:favorite_pk>/',
+         views.UpdateFavorite.as_view(), name='favorite-update')
 ]
