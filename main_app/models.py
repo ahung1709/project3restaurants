@@ -36,3 +36,7 @@ class Review(models.Model):
     rating = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.restaurant} has a rating {self.rating} with review: {self.content}"
+

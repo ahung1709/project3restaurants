@@ -12,8 +12,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from .models import Restaurant, Favorite
-from .forms import UpdateUserForm, UpdateRestaurantForm
+from .models import Restaurant, Favorite, Review
+from .forms import UpdateUserForm, UpdateRestaurantForm, ReviewForm
 # from .form import FeedingForm
 from django import forms
 from django.views.generic import ListView
@@ -40,21 +40,23 @@ def about(request):
 
 
 def all_restaurants_index(request):
-    restaurants = Restaurant.objects.all()
-    context = {"restaurants": restaurants, "public_page": True}
+    # restaurants = Restaurant.objects.all()
+    restaurants = Restaurant.objects.filter(published=True).order_by('id')
+    context = { "restaurants": restaurants, "public_page": True }
     return render(request, 'restaurants/index.html', context)
 
 
 def all_restaurants_detail(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     # print(restaurant)
-    context = {"restaurant": restaurant, "public_page": True}
+    context = { "restaurant": restaurant, "public_page": True }
+    review_form = ReviewForm()
     return render(request, 'main_app/restaurant_detail.html', context)
 
 
 @login_required
 def restaurants_index(request):
-    restaurants = Restaurant.objects.filter(user=request.user)
+    restaurants = Restaurant.objects.filter(user=request.user).order_by('id')
     # You could also retrieve the logged in user's restaurants like this
     # restaurants = request.user.restaurant_set.all()
     context = {"restaurants": restaurants, "public_page": False}
@@ -68,7 +70,7 @@ class RestaurantDetail(LoginRequiredMixin, DetailView):
 
 class RestaurantCreate(LoginRequiredMixin, CreateView):
     model = Restaurant
-    fields = ['name', 'location', 'menu', 'hours']
+    fields = ['name', 'profile_pic', 'location', 'menu', 'hours', 'published']
 
     # This inherited method is called when a
     # valid restaurant is being submitted
@@ -195,8 +197,6 @@ def testing(request):
     return render(request, 'testing.html')
 
 
-# Favorites views
-
 class ListFavorites(LoginRequiredMixin, ListView):
     model = Favorite
 
@@ -227,3 +227,32 @@ class UpdateFavorite(LoginRequiredMixin,  UpdateView):
     model = Favorite
     fields = ["title"]
     success_url = '/favorites/'
+
+### Review views ###
+
+# def add_review(request, restaurant_id):
+#     url = request.META.get('HTTP_REFERER')
+#     restaurant = Restaurant.objects.get(id=restaurant_id)
+#     context = { "restaurant": restaurant, "public_page": True }
+#     form = ReviewForm(request.POST)
+#     if form.is_valid():
+#         new_review = form.save(commit=False)
+#         new_review.content = form.cleaned_data['content']
+#         new_review.rating = form.cleaned_data['rating']
+#         new_review.ip = request.META.get('REMOTE_ADDR')
+#         new_review.user_id = request.user.id
+#         new_review.restaurant_id = restaurant_id
+#         new_review.save()
+#     return redirect(url, restaurant_id=restaurant_id)
+#     # return render(request, 'main_app/restaurant_detail.html', context)
+
+def add_review(request, restaurant_id):
+    # url = request.META.get('HTTP_REFERER')
+    form = ReviewForm(request.POST)
+    if form.is_valid():
+        # form.save()
+        new_review = form.save(commit=False)
+        new_review.restaurant_id = restaurant_id
+        new_review.user_id = request.user
+        new_review.save()
+    return render('main_app/restaurant_detail.html', restaurant_id=restaurant_id)
