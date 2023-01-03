@@ -4,6 +4,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse
 from django.contrib.auth import login
+from django.contrib.auth import logout
 # from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -52,16 +53,6 @@ def restaurants_index(request):
     context = { "restaurants": restaurants, "public_page": False }
     return render(request, 'restaurants/index.html', context)
 
-# def all_restaurants_index(request):
-#     restaurants = Restaurant.objects.filter(user=request.user)
-    # You could also retrieve the logged in user's restaurants like this
-    # restaurants = request.user.restaurant_set.all()
-    # return render(request, 'restaurants/my_restaurants_index.html', { "restaurants": restaurants })
-
-# def restaurants_detail(request):
-    # restaurant = Restaurant.objects.get(id=restaurant_id)
-    # return render(request, 'restaurants/detail.html', { })
-
 class RestaurantDetail(LoginRequiredMixin, DetailView):
     model = Restaurant
     fields = '__all__'
@@ -80,37 +71,29 @@ class RestaurantCreate(LoginRequiredMixin, CreateView):
 
 @login_required
 def restaurant_update(request, restaurant_id):
+    # Get the restaurant instance with id = restaurant_id
     restaurant = Restaurant.objects.get(id=restaurant_id)
+
+    # Process the form data if it is a POST request
     if request.method == 'POST':
+
+        # Create form instance for the restaurant instance
         restaurant_form = UpdateRestaurantForm(request.POST, instance=restaurant)
+
+        # Check if the form instance is valid
         if restaurant_form.is_valid():
-            restaurant_form.save()
+            restaurant_form.save() # save the valid form instance to the database
             return redirect(to='restaurants_detail', pk=restaurant.id)
     else: 
+        # Get the form instance for the restaurant instance if it is not a POST request 
+        # (e.g. it is a GET request)
         restaurant_form = UpdateRestaurantForm(instance=restaurant)
-        print(restaurant_form)
+        # print(restaurant_form)
     
     return render(request, 'restaurants/restaurant_form.html', {
         'restaurant':restaurant,
         'restaurant_form':restaurant_form
     })
-
-class RestaurantUpdate(LoginRequiredMixin, UpdateView):
-    model = Restaurant
-    fields = '__all__'
-
-    def get_form(self):
-        # print(self.request.GET)
-        form = super().get_form()
-
-        name = forms.CharField(max_length=150, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-        # first_name = forms.CharField(max_length=150, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-        # print(form)
-        print(form.fields['name'])
-        # print(form.first_name)
-        return form
 
 class RestaurantDelete(LoginRequiredMixin, DeleteView):
     model = Restaurant
@@ -139,35 +122,13 @@ def signup(request):
 
 ### User views ###
 
-class UserDetail(LoginRequiredMixin, DetailView):
-    model = User
-    field = '__all__'
-
-class UserUpdate(LoginRequiredMixin, UpdateView):
-    model = User
-    # fields = '__all__'
-    fields = ['first_name', 'last_name', 'email', 'password']
-    success_url = '../profile'
-
 @login_required
 def user_profile(request):
-    # user = User.objects.get(id=user_id)
-    context = {
-        # 'user':user,
-    }
-    # return render(request, 'registration/settings.html', context)
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile.html')
 
 @login_required
 def user_update(request):
-    # print(request.POST)
-
     if request.method == 'POST':
-        # print(request.user.id)
-        # print(request.user.username)
-        # print(request.user.first_name)
-        # print(request.user.last_name)
-        # print(request.user.password)
         user_form = UpdateUserForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
@@ -176,15 +137,6 @@ def user_update(request):
     else: 
         user_form = UpdateUserForm(instance=request.user)
         print(user_form)
-        # print(user_form.first_name)
-        # user_form.first_name.value = request.user.first_name
-        # print(request.POST['first_name'])
-    # print(request.method)
-    # if request.method == 'POST':
-        # print(request.POST)
-        # form = UserCreationForm(request.POST)
-        # print(form)
-        # print(form.is_valid())
     return render(request, 'users/update.html', {
         'user_form':user_form
     })
@@ -204,6 +156,7 @@ def user_delete_confirm(request):
         try:
             u = User.objects.get(username = request.user.username)
             u.delete()
+            logout(request)
             # message.success(request, "The user is deleted")
     
         except User.DoesNotExist:
