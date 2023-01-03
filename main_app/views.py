@@ -253,6 +253,6 @@ def add_review(request, restaurant_id):
         # form.save()
         new_review = form.save(commit=False)
         new_review.restaurant_id = restaurant_id
-        new_review.user_id = request.user
+        new_review.user_id = request.user.id
         new_review.save()
-    return render('main_app/restaurant_detail.html', restaurant_id=restaurant_id)
+    return render(request, 'main_app/restaurant_detail.html', {'restaurant_id':restaurant_id})

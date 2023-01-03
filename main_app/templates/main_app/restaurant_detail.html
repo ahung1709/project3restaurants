@@ -62,7 +62,7 @@
                 <tbody>
                     {% for review in restaurant.review_set.all %}
                     <tr>
-                        <td>{{restaurant.user_id}}</td>
+                        <td>{{review.user.username}}</td>
                         <td>{{review.content}}</td>
                         <td>{{review.rating}}</td>
                     </tr>
