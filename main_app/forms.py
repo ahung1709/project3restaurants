@@ -22,6 +22,12 @@ class UpdateRestaurantForm(forms.ModelForm):
         model = Restaurant
         fields = ['name', 'profile_pic', 'location', 'menu', 'hours', 'published']
 
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['content', 'rating']
+
+
 # class AddRestaurantForm(forms.ModelForm):
     # class Meta:
         # model = Restaurant
