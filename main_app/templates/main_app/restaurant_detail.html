@@ -43,6 +43,33 @@
                 </tbody>
             </table>
         </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Review</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <form action="{% url 'add_review' restaurant.id %}" method="post">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                    <textarea name="content" placeholder="review" rows="3"></textarea>
+                    <textarea name="rating" placeholder="rating" rows="3"></textarea>
+                    <input type="submit" class="btn btn-primary" value="Submit Review">
+                </form>
+                <tbody>
+                    {% for review in restaurant.review_set.all %}
+                    <tr>
+                        <td>{{restaurant.user_id}}</td>
+                        <td>{{review.content}}</td>
+                        <td>{{review.rating}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% if not public_page %}
             <div class="card-body">
                 <a href="{% url 'restaurants_update' restaurant.id %}" class="btn btn-primary">Edit</a>
