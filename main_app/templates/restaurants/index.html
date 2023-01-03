@@ -21,14 +21,31 @@
     {% for restaurant in restaurants %}
         <div class="card" style="width: 50rem;">
             <div class="row">
-                <div class="col-md-3">
-                    <img src="..." class="card-img-top" alt="...">
+                <div class="col-md-3 pt-4">
+                    <img src="{{ restaurant.profile_pic }}" class="card-img-top" alt="...">
                 </div>
                 <div class="col-md-9">
                     <div class="card-body">
-                        <h5 class="card-title">Name: {{ restaurant.name }}</h5>
-                        <p class="card-text">Location: {{ restaurant.location }}</p>
-                        <p class="card-text">Hours: {{ restaurant.hours }}</p>
+                        
+                        <table class="table table-borderless p-0">
+                            <thead>
+                                <tr>
+                                    <th colspan="2"><h5 class="card-title">{{ restaurant.name }}</h5></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th class="col-md-2"><p class="card-text">Location:</p></th>
+                                    <td><p class="card-text"> {{ restaurant.location }}</p></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-2">Hours:</th>
+                                    <td><p class="card-text"> {{ restaurant.hours|linebreaksbr }}</p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        
                         {% if public_page %}
                             <a class="btn btn-success" href="{% url 'all_restaurants_detail' restaurant.id %}">Detail</a>
                         {% else %}
