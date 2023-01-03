@@ -33,6 +33,25 @@
                 </tbody>
             </table>
         </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Review</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>test1user</td>
+                        <td>test2review</td>
+                        <td>test3rating</td>
+                        <td>test4hello?</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         {% if not public_page %}
             <div class="card-body">
                 <a href="{% url 'restaurants_update' restaurant.id %}" class="btn btn-primary">Edit</a>

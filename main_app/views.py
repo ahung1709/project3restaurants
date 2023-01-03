@@ -174,3 +174,8 @@ def user_delete_confirm(request):
 
 def testing(request):
     return render(request, 'testing.html')
+
+
+### Review views ###
+
+# def add_review(request, restaurant_id):
