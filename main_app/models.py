@@ -16,7 +16,7 @@ class Favorite(models.Model):
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=50)
-    profile_pic = models.CharField(max_length=200)
+    profile_pic = models.CharField(max_length=200, default='')
     location = models.CharField(max_length=100)
     menu = models.CharField(max_length=500)
     hours = models.CharField(max_length=500)
