@@ -1,0 +1,15 @@
+{%extends 'favourites/base.html'%} {% block main_content %} 
+{% for each in favorite_list %}
+<div class="card mr">
+  <div class="card-body">
+    <a href="{% url 'restaurants_detail'  each.id %}">{{each.title}}</a>
+    <p>
+      <a href="{% url 'favorite-update' each.id each.id %}" class="btn btn-primary">Edit</a>
+      <a href="{% url 'favorite-delete' each.id each.id%}" class="btn btn-danger"
+        >Delete</a
+      >
+    </p>
+  </div>
+</div>
+{% endfor %} {% endblock %}
+

@@ -12,50 +12,59 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from .models import Restaurant
+from .models import Restaurant, Favorite
 from .forms import UpdateUserForm, UpdateRestaurantForm
 # from .form import FeedingForm
-
 from django import forms
+from django.views.generic import ListView
+
 
 # Create your views here.
 
 ### Home views ###
 
+
 def front(request):
     return render(request, 'front.html')
+
 
 def home(request):
     return render(request, 'home.html')
     # return HttpResponse('<h1>Hello</h1>')
+
 
 def about(request):
     return render(request, 'about.html')
 
 ### Restaurants views ###
 
+
 def all_restaurants_index(request):
     restaurants = Restaurant.objects.all()
-    context = { "restaurants": restaurants, "public_page": True }
+    context = {"restaurants": restaurants, "public_page": True}
     return render(request, 'restaurants/index.html', context)
+
 
 def all_restaurants_detail(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     # print(restaurant)
-    context = { "restaurant": restaurant, "public_page": True }
+    context = {"restaurant": restaurant, "public_page": True}
     return render(request, 'main_app/restaurant_detail.html', context)
+
 
 @login_required
 def restaurants_index(request):
     restaurants = Restaurant.objects.filter(user=request.user)
     # You could also retrieve the logged in user's restaurants like this
     # restaurants = request.user.restaurant_set.all()
-    context = { "restaurants": restaurants, "public_page": False }
+    context = {"restaurants": restaurants, "public_page": False}
     return render(request, 'restaurants/index.html', context)
+
 
 class RestaurantDetail(LoginRequiredMixin, DetailView):
     model = Restaurant
     fields = '__all__'
+
 
 class RestaurantCreate(LoginRequiredMixin, CreateView):
     model = Restaurant
@@ -65,9 +74,10 @@ class RestaurantCreate(LoginRequiredMixin, CreateView):
     # valid restaurant is being submitted
     def form_valid(self, form):
         # Assign the logged in user (self.request.user)
-        form.instance.user = self.request.user # form.instance is the restaurant
+        form.instance.user = self.request.user  # form.instance is the restaurant
         # Let the CreateView do its job as usual
         return super().form_valid(form)
+
 
 @login_required
 def restaurant_update(request, restaurant_id):
@@ -78,28 +88,31 @@ def restaurant_update(request, restaurant_id):
     if request.method == 'POST':
 
         # Create form instance for the restaurant instance
-        restaurant_form = UpdateRestaurantForm(request.POST, instance=restaurant)
+        restaurant_form = UpdateRestaurantForm(
+            request.POST, instance=restaurant)
 
         # Check if the form instance is valid
         if restaurant_form.is_valid():
-            restaurant_form.save() # save the valid form instance to the database
+            restaurant_form.save()  # save the valid form instance to the database
             return redirect(to='restaurants_detail', pk=restaurant.id)
-    else: 
-        # Get the form instance for the restaurant instance if it is not a POST request 
+    else:
+        # Get the form instance for the restaurant instance if it is not a POST request
         # (e.g. it is a GET request)
         restaurant_form = UpdateRestaurantForm(instance=restaurant)
         # print(restaurant_form)
-    
+
     return render(request, 'restaurants/restaurant_form.html', {
-        'restaurant':restaurant,
-        'restaurant_form':restaurant_form
+        'restaurant': restaurant,
+        'restaurant_form': restaurant_form
     })
+
 
 class RestaurantDelete(LoginRequiredMixin, DeleteView):
     model = Restaurant
     success_url = '/restaurants/'
 
 ### Registration views ###
+
 
 def signup(request):
     error_message = ''
@@ -122,9 +135,11 @@ def signup(request):
 
 ### User views ###
 
+
 @login_required
 def user_profile(request):
     return render(request, 'users/profile.html')
+
 
 @login_required
 def user_update(request):
@@ -134,43 +149,81 @@ def user_update(request):
             user_form.save()
             # message.success(request, 'Your profile is updated successfully')
             return redirect(to='user_profile')
-    else: 
+    else:
         user_form = UpdateUserForm(instance=request.user)
         print(user_form)
     return render(request, 'users/update.html', {
-        'user_form':user_form
+        'user_form': user_form
     })
+
 
 class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'users/change_password.html'
     # success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('pwd_change_done')
 
+
 @login_required
 def pwd_change_done(request):
     return render(request, 'users/password_change_done.html')
+
 
 @login_required
 def user_delete_confirm(request):
     if request.method == 'POST':
         try:
-            u = User.objects.get(username = request.user.username)
+            u = User.objects.get(username=request.user.username)
             u.delete()
             logout(request)
             # message.success(request, "The user is deleted")
-    
+
         except User.DoesNotExist:
             # message.error(request, "User does not exist")
             return render(request, 'front.html')
-    
+
         except Exception as e:
-            return render(request, 'front.html', {'err':e.message})
-        
+            return render(request, 'front.html', {'err': e.message})
+
         return render(request, 'front.html')
-    
+
     return render(request, 'users/user_delete_confirm.html')
 
 ### Testing views ###
 
+
 def testing(request):
     return render(request, 'testing.html')
+
+
+# Favorites views
+
+class ListFavorites(LoginRequiredMixin, ListView):
+    model = Favorite
+
+
+class CreateView(LoginRequiredMixin, CreateView):
+    model = Favorite
+    fields = ['title']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    success_url = '/favorites/'
+
+
+class FavoriteDelete(LoginRequiredMixin, DeleteView):
+    model = Favorite
+    fields = '__all__'
+    success_url = '/favorites/'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        filter = DeleteView(self.request.GET, queryset)
+        return filter.qs
+
+
+class UpdateFavorite(LoginRequiredMixin,  UpdateView):
+    model = Favorite
+    fields = ["title"]
+    success_url = '/favorites/'
