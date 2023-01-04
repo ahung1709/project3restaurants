@@ -17,7 +17,7 @@ from .forms import UpdateUserForm, UpdateRestaurantForm, ReviewForm
 # from .form import FeedingForm
 from django import forms
 from django.views.generic import ListView
-
+from django.db.models import Avg
 
 # Create your views here.
 
@@ -243,6 +243,7 @@ def add_review(request, restaurant_id):
         new_review.save()
     return redirect(url, restaurant_id=restaurant_id)
 
+
 @login_required
 def delete_review(request, restaurant_id, review_id):
     url = request.META.get('HTTP_REFERER')
@@ -251,3 +252,8 @@ def delete_review(request, restaurant_id, review_id):
         delete_review = Review.objects.filter(id=review_id)
         delete_review.delete()
     return redirect(url, restaurant_id=restaurant_id)
+
+def detail_review(request):
+    # _avg = Restaurant.objects.aggregate(avg=Avg('rating'))
+    _avg = Review.objects.aggregate(avg=Avg('rating'))
+    return render(request, 'main_app/restaurant_detail.html', {"avg":_avg})

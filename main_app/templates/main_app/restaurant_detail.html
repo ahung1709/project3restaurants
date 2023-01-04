@@ -1,5 +1,6 @@
 {% extends 'base_manager.html' %}
 {% block main_content %}
+{% load mathfilters %}
 
 <!-- <h1>Restaurant Detail</h1> -->
 <div class="row m-2">
@@ -47,9 +48,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>User</th>
-                    <th>Reviews {{review.reviews.all.count}}</th>
-                    <th>Rating</th>
+                    <th>User {{9|div:3}}</th>
+                    <th>Reviews: {{restaurant.review_set.count}}</th>
+                    <th>Rating {{avg.avg}} </th>
                     <th></th>
                 </tr>
             </thead>
@@ -58,7 +59,7 @@
                 <tr>
                     <td>{{review.user.username}}</td>
                     <td>{{review.content}}</td>
-                    <td>{{review.rating}}</td>
+                    <td>{{review.rating}}/5</td>
                     {% if user.username == review.user.username %}
                     <td>
                         <form action="{% url 'delete_review' restaurant.id review.id %}" method="post">
@@ -102,3 +103,4 @@
     {% endif %}
 </div>
 {% endblock %}
+
