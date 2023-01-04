@@ -17,6 +17,7 @@ from .forms import UpdateUserForm, UpdateRestaurantForm, ReviewForm
 # from .form import FeedingForm
 from django import forms
 from django.views.generic import ListView
+from django import http
 
 
 # Create your views here.
@@ -42,14 +43,14 @@ def about(request):
 def all_restaurants_index(request):
     # restaurants = Restaurant.objects.all()
     restaurants = Restaurant.objects.filter(published=True).order_by('id')
-    context = { "restaurants": restaurants, "public_page": True }
+    context = {"restaurants": restaurants, "public_page": True}
     return render(request, 'restaurants/index.html', context)
 
 
 def all_restaurants_detail(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     # print(restaurant)
-    context = { "restaurant": restaurant, "public_page": True }
+    context = {"restaurant": restaurant, "public_page": True}
     review_form = ReviewForm()
     return render(request, 'main_app/restaurant_detail.html', context)
 
@@ -67,6 +68,7 @@ class RestaurantDetail(LoginRequiredMixin, DetailView):
     model = Restaurant
     fields = '__all__'
 
+
 @login_required
 def restaurant_create(request):
     restaurant_form = UpdateRestaurantForm(request.POST)
@@ -82,6 +84,7 @@ def restaurant_create(request):
         restaurant_form = UpdateRestaurantForm()
 
     return render(request, 'restaurants/restaurant_form.html', {'restaurant_form': restaurant_form})
+
 
 @login_required
 def restaurant_update(request, restaurant_id):
@@ -219,10 +222,22 @@ class FavoriteDelete(LoginRequiredMixin, DeleteView):
     fields = '__all__'
     success_url = '/favorites/'
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        filter = DeleteView(self.request.GET, queryset)
-        return filter.qs
+    def delete(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        if self.object.User == request.user:
+            success_url = self.get_success_url()
+            self.object.delete()
+            return http.HttpResponseRedirect(success_url)
+        else:
+            return http.HttpResponseForbidden("Cannot delete other's posts")
+
+# def favorite_delete(request, favorite_pk):
+#     if request.method == 'POST':
+#         u = User.objects.get(id=request.user.id)
+#         if u == favorite_pk:
+#             u.delete()
+#             # return render(request, 'main_app/favorite_confirm_delete/')
 
 
 class UpdateFavorite(LoginRequiredMixin,  UpdateView):
@@ -230,7 +245,14 @@ class UpdateFavorite(LoginRequiredMixin,  UpdateView):
     fields = ["title"]
     success_url = '/favorites/'
 
+
+def detail_favorites(request, favorite_id):
+    each = Favorite.objects.get(id=favorite_id)
+    return render(request, 'favourites/detail.html', {'each': each})
+
+
 ### Review views ###
+
 
 def add_review(request, restaurant_id):
     url = request.META.get('HTTP_REFERER')
