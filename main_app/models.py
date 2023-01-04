@@ -39,4 +39,3 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.restaurant} has a rating {self.rating} with review: {self.content}"
-
