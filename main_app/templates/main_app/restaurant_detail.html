@@ -1,5 +1,6 @@
 {% extends 'base_manager.html' %}
 {% block main_content %}
+{% load mathfilters %}
 
 <!-- <h1>Restaurant Detail</h1> -->
 <div class="row m-2">
@@ -10,85 +11,96 @@
     {% endif %}
 </div>
 <div class="card border-0">
-        <div class="card-body">
-            <div class="card-title">
-                <h1 class="card-title">Details for {{ restaurant.name }}</h5>
-            </div>
+    <div class="card-body">
+        <div class="card-title">
+            <h1 class="card-title">Details for {{ restaurant.name }}</h5>
         </div>
-        <div class="card-body">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th scope="row">Location</th>
-                        <td><p>{{ restaurant.location }}</p></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Profile picture</th>
-                        <td><img src="{{ restaurant.profile_pic }}" width="500"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Menu</th>
-                        <td><p>{{ restaurant.menu|linebreaksbr }}</p></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Hours</th>
-                        <td><p>{{ restaurant.hours|linebreaksbr }}</p></td>
-                    </tr>
-                    {% if not public_page %}
-                    <tr>
-                        <th scope="row">Published</th>
-                        <td><input class="form-check-input" type="checkbox" {{ restaurant.published|yesno:"checked,," }} disabled></td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
-        <div class="card-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Review</th>
-                        <th>Rating</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for review in restaurant.review_set.all %}
-                    <tr>
-                        <td>{{review.user.username}}</td>
-                        <td>{{review.content}}</td>
-                        <td>{{review.rating}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <form action="{% url 'add_review' restaurant.id %}" method="post">
-                {% csrf_token %}
-                {{ review_form.as_p }}
-                <textarea name="content" placeholder="review" rows="3"></textarea>
-                <select class="browser-default" name="rating">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                <input type="submit" class="btn btn-primary" value="Submit Review">
-            </form>
-            <form action="{%url 'create-favourite' restaurant.id %}"method = 'POST'>
-                {%csrf_token%}
-                
-                <div>
-                    <input type="submit" class="btn btn-outline-primary" value="Add to favorites">
-               
-            </div>
-            </form>
-        </div>
-        {% if not public_page %}
-            <div class="card-body">
-                <a href="{% url 'restaurants_update' restaurant.id %}" class="btn btn-primary">Edit</a>
-                <a href="{% url 'restaurants_delete' restaurant.id %}" class="btn btn-danger">Delete</a>
-            </div>
-        {% endif %}
     </div>
+    <div class="card-body">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th scope="row">Location</th>
+                    <td><p>{{ restaurant.location }}</p></td>
+                </tr>
+                <tr>
+                    <th scope="row">Profile picture</th>
+                    <td><img src="{{ restaurant.profile_pic }}" width="500"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Menu</th>
+                    <td><p>{{ restaurant.menu|linebreaksbr }}</p></td>
+                </tr>
+                <tr>
+                    <th scope="row">Hours</th>
+                    <td><p>{{ restaurant.hours|linebreaksbr }}</p></td>
+                </tr>
+                {% if not public_page %}
+                <tr>
+                    <th scope="row">Published</th>
+                    <td><input class="form-check-input" type="checkbox" {{ restaurant.published|yesno:"checked,," }} disabled></td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>User {{9|div:3}}</th>
+                    <th>Reviews: {{restaurant.review_set.count}}</th>
+                    <th>Rating {{avg.avg}} </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in restaurant.review_set.all %}
+                <tr>
+                    <td>{{review.user.username}}</td>
+                    <td>{{review.content}}</td>
+                    <td>{{review.rating}}/5</td>
+                    {% if user.username == review.user.username %}
+                    <td>
+                        <form action="{% url 'delete_review' restaurant.id review.id %}" method="post">
+                            {% csrf_token %}
+                            <button>
+                                delete
+                            </button>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if user.is_authenticated %}
+        <form action="{% url 'add_review' restaurant.id %}" method="post">
+            {% csrf_token %}
+            {{ review_form.as_p }}
+            <textarea name="content" placeholder="Write a review" rows="3"></textarea>
+            <select class="browser-default" name="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                </select>
+            <input type="submit" class="btn btn-primary" value="Submit Review">
+        </form>
+    </div>
+    <div>
+        <form action="{%url 'create-favourite' restaurant.id %}"method = 'POST'>
+        <input type="submit" class="btn btn-outline-primary" value="Add to favorites">
+        </form>
+    </div>
+    {% endif %}
+    {% if not public_page %}
+    <div class="card-body">
+        <a href="{% url 'restaurants_update' restaurant.id %}" class="btn btn-primary">Edit</a>
+        <a href="{% url 'restaurants_delete' restaurant.id %}" class="btn btn-danger">Delete</a>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
+

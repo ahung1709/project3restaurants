@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -18,7 +18,7 @@ from .forms import UpdateUserForm, UpdateRestaurantForm, ReviewForm
 from django import forms
 from django.views.generic import ListView
 from django import http
-
+from django.db.models import Avg
 
 # Create your views here.
 
@@ -253,14 +253,28 @@ def detail_favorites(request, favorite_id):
 
 ### Review views ###
 
-
+@login_required
 def add_review(request, restaurant_id):
     url = request.META.get('HTTP_REFERER')
     form = ReviewForm(request.POST)
     if form.is_valid():
-        # form.save()
         new_review = form.save(commit=False)
         new_review.restaurant_id = restaurant_id
         new_review.user_id = request.user.id
         new_review.save()
     return redirect(url, restaurant_id=restaurant_id)
+
+
+@login_required
+def delete_review(request, restaurant_id, review_id):
+    url = request.META.get('HTTP_REFERER')
+    if request.method =="POST":
+        # delete_review = Review.objects.get()
+        delete_review = Review.objects.filter(id=review_id)
+        delete_review.delete()
+    return redirect(url, restaurant_id=restaurant_id)
+
+def detail_review(request):
+    # _avg = Restaurant.objects.aggregate(avg=Avg('rating'))
+    _avg = Review.objects.aggregate(avg=Avg('rating'))
+    return render(request, 'main_app/restaurant_detail.html', {"avg":_avg})
