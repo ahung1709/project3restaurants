@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>To Do List</h1>
+    <%if(todos.length === 0){%>
+    <h3>There are no To Dos Yet!</h3>
+    <%}else{%>
+    <ul>
+      <% todos.forEach(todo => { %>
+      <li><%= todo.each%> - <%= todo.done ? 'Done' : "Not Done" %></li>
+      <% }); %>
+    </ul>
+    
+    <% }%> 
+
+    <hr />
+    <form action="/" method="POST">
+      <input type="text" required name="todo" id="refcode" />
+      <button type="submit">ADD TO DO</button>
+    </form>
+  </body>
+</html>
