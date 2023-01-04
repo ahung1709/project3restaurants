@@ -67,19 +67,21 @@ class RestaurantDetail(LoginRequiredMixin, DetailView):
     model = Restaurant
     fields = '__all__'
 
+@login_required
+def restaurant_create(request):
+    restaurant_form = UpdateRestaurantForm(request.POST)
+    if request.method == 'POST':
+        if restaurant_form.is_valid():
+            # don't save the form to the db until it
+            # has the user_id assigned
+            new_restaurant = restaurant_form.save(commit=False)
+            new_restaurant.user_id = request.user.id
+            restaurant_form.save()  # save the valid form instance to the database
+            return redirect(to='restaurants_detail', pk=new_restaurant.id)
+    else:
+        restaurant_form = UpdateRestaurantForm()
 
-class RestaurantCreate(LoginRequiredMixin, CreateView):
-    model = Restaurant
-    fields = ['name', 'profile_pic', 'location', 'menu', 'hours', 'published']
-
-    # This inherited method is called when a
-    # valid restaurant is being submitted
-    def form_valid(self, form):
-        # Assign the logged in user (self.request.user)
-        form.instance.user = self.request.user  # form.instance is the restaurant
-        # Let the CreateView do its job as usual
-        return super().form_valid(form)
-
+    return render(request, 'restaurants/restaurant_form.html', {'restaurant_form': restaurant_form})
 
 @login_required
 def restaurant_update(request, restaurant_id):

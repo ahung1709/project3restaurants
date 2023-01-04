@@ -4,7 +4,11 @@
 <div class="card border-0">
     <div class="card-body">
         <div class="card-title">
-            <h1>Update Restaurant</h1>
+            {% if restaurant %}
+                <h1>Update <span>{{ restaurant.name }}</span></h1>
+            {% else %}
+                <h1>Add Restaurant</h1>
+            {% endif %}
         </div>
     </div>
     <div class="card-body">
@@ -13,8 +17,13 @@
             <table class="table">
                 {{ restaurant_form.as_table }}
             </table>
-            <input type="submit" value="Update Restaurant" class="btn btn-primary">
-            <a href="{% url 'restaurants_detail' restaurant.id %}">Cancel</a>
+            {% if restaurant %}
+                <input type="submit" value="Update Restaurant" class="btn btn-primary">
+                <a href="{% url 'restaurants_detail' restaurant.id %}">Cancel</a>
+            {% else %}
+                <input type="submit" value="Add Restaurant" class="btn btn-primary">
+                <a href="{% url 'restaurants_index' %}">Cancel</a>
+            {% endif %}
         </form>
     </div>
 </div>
