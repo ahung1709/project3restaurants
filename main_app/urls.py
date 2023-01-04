@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     path('', views.front, name='front'),
-    path('about/', views.about, name='about'),
+    path('about/', views.about, name='about'),  
 
     ### Restaurant routes ###
 
