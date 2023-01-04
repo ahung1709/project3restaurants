@@ -59,7 +59,7 @@
                     <td>{{review.user.username}}</td>
                     <td>{{review.content}}</td>
                     <td>{{review.rating}}</td>
-                    {% if user.is_authenticated %}
+                    {% if user.username == review.user.username %}
                     <td>
                         <form action="{% url 'delete_review' restaurant.id review.id %}" method="post">
                             {% csrf_token %}
