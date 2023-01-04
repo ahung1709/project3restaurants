@@ -44,7 +44,8 @@ urlpatterns = [
     path('favorites/', views.ListFavorites.as_view(), name='favorites'),
     path('restaurants/<int:restaurant_id>/favorites/create/',
          views.CreateView.as_view(), name='create-favourite'),
-
+    path('favorite/<int:favorite_id>/', views.detail_favorites,
+         name='favorite-details'),
     path('restaurants/<int:pk>/favorites/delete/<int:favorite_pk>/',
          views.FavoriteDelete.as_view(),  name='favorite-delete'),
     path('restaurants/<int:pk>/favorites/update/<int:favorite_pk>/',

@@ -1,15 +1,31 @@
-{%extends 'favourites/base.html'%} {% block main_content %} 
-{% for each in favorite_list %}
-<div class="card mr">
-  <div class="card-body">
-    <a href="{% url 'restaurants_detail'  each.id %}">{{each.title}}</a>
-    <p>
-      <a href="{% url 'favorite-update' each.id each.id %}" class="btn btn-primary">Edit</a>
-      <a href="{% url 'favorite-delete' each.id each.id%}" class="btn btn-danger"
-        >Delete</a
-      >
-    </p>
-  </div>
-</div>
-{% endfor %} {% endblock %}
+{%extends 'favourites/base.html'%}
+<!-- the person that created the favorite is the same as the one  as the user who is logged in -->
 
+<!-- <p>Username that created: {{ each.user.username }}</p>
+  <p>Current user is {{user.id}}</p> -->
+{% block main_content %}
+<div>
+  {% for each in favorite_list %} {% if user.id == each.user.id %}
+
+  <div class="card mr">
+    <div class="card-body">
+      <strong>
+       <a href="{%url 'favorite-details' each.id%}">{{each.title}}</a> 
+      </strong>
+      <div>
+        <a
+          href="{% url 'favorite-update' each.id each.id %}"
+          class="btn btn-primary mr"
+          >Edit</a
+        >
+        <a
+          href="{% url 'favorite-delete' each.id each.id%}"
+          class="btn btn-danger mr"
+          >Delete</a
+        >
+      </div>
+    </div>
+  </div>
+  {%endif%} {% endfor %}
+</div>
+{% endblock %}
