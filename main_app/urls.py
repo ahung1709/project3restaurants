@@ -20,6 +20,7 @@ urlpatterns = [
     path('restaurants/<int:restaurant_id>/update/', views.restaurant_update, name='restaurants_update'), 
     path('restaurants/<int:pk>/delete/', views.RestaurantDelete.as_view(), name='restaurants_delete'), 
     path('restaurants/<int:restaurant_id>/add_review/', views.add_review, name='add_review'),
+    path('restaurants/<int:restaurant_id>/delete_review/<int:review_id>/', views.delete_review, name='delete_review'),
 
     ### Account routes ###
     path('accounts/signup/', views.signup, name='signup'),
