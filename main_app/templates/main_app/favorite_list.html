@@ -6,11 +6,11 @@
 {% block main_content %}
 <div>
   {% for each in favorite_list %} {% if user.id == each.user.id %}
-       <!-- ok -->
+  <!-- ok -->
   <div class="card mr">
     <div class="card-body">
       <strong>
-       <a href="{%url 'favorite-details' each.id%}">{{each.title}}</a> 
+        <a href="{%url 'favorite-details' each.id%}">{{each.title}}</a>
       </strong>
       <div>
         <a
@@ -27,5 +27,4 @@
     </div>
   </div>
 </div>
-{% endfor %} {% endblock %}
-
+{%endif%} {% endfor %} {% endblock %}
