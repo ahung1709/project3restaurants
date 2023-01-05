@@ -46,9 +46,10 @@
     <div class="card-body">
         <table class="table">
             <thead>
+                <h2>Reviews: {{restaurant.review_set.count}}</h2>
                 <tr>
                     <th>User</th>
-                    <th>Reviews: {{restaurant.review_set.count}}</th>
+                    <th>Review</th>
                     <th>Rating {{avg.avg}} </th>
                     <th></th>
                 </tr>
@@ -77,7 +78,9 @@
         <form action="{% url 'add_review' restaurant.id %}" method="post">
             {% csrf_token %}
             {{ review_form.as_p }}
-            <textarea name="content" placeholder="Write a review" rows="3"></textarea>
+            <textarea name="content" placeholder="Write a review" cols="100" rows="3"></textarea>
+            <br>
+            <label>Rating</label>
             <select class="browser-default" name="rating">
                 <option value="1">1</option>
                 <option value="2">2</option>
