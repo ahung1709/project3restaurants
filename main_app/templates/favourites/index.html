@@ -29,17 +29,9 @@
               </td>
             </tr>
           </tbody>
-          <form
-            action="{% url 'unassociate' restaurant.id  %}"
-            method="POST"
-          >
+          <form action="{% url 'unassociate' restaurant.id  %}" method="POST">
             {%csrf_token%}
-            <!-- <button type="submit" class="btn btn-outline-danger">Remove</button> -->
-            <input
-              type="submit"
-              value="Remove"
-              class="btn btn-outline-danger"
-            />
+            <input type="submit" value="Remove" class="btn btn-outline-danger"/>
           </form>
         </table>
       </div>

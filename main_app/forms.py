@@ -6,7 +6,6 @@ class UpdateUserForm(forms.ModelForm):
     first_name = forms.CharField(max_length=150, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(max_length=150, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.CharField(max_length=254, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    # print(forms)
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']

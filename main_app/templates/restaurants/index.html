@@ -12,7 +12,6 @@
             <h1>My Restaurants</h1>
             <a class="btn btn-primary" href="{% url 'restaurants_create' %}">Add Restaurant</a>
         </div>
-        
     {% endif %}
 </div>
 <div class="row m-2">
@@ -24,7 +23,6 @@
                 </div>
                 <div class="col-md-9">
                     <div class="card-body">
-                        
                         <table class="table table-borderless p-0">
                             <thead>
                                 <tr>
@@ -42,8 +40,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
-                        
                         {% if public_page %}
                             <a class="btn btn-success" href="{% url 'all_restaurants_detail' restaurant.id %}">Detail</a>
                         {% else %}

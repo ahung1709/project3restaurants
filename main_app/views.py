@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -15,7 +15,6 @@ from .models import Restaurant, Favorite, Review
 from .forms import UpdateUserForm, UpdateRestaurantForm, ReviewForm
 from django import forms
 from django.views.generic import ListView
-from decimal import Decimal, ROUND_CEILING
 # Create your views here.
 
 ### Home views ###
@@ -43,7 +42,6 @@ def all_restaurants_detail(request, restaurant_id):
         avg = round(sum(r.rating for r in reviews)/len(reviews), 1)
     else:
         avg = "0"
-    # print(restaurant)
     context = {"restaurant": restaurant, "public_page": True, 'avg': avg}
     review_form = ReviewForm()
     return render(request, 'main_app/restaurant_detail.html', context)
@@ -76,7 +74,6 @@ def restaurant_create(request):
             return redirect(to='restaurants_detail', pk=new_restaurant.id)
     else:
         restaurant_form = UpdateRestaurantForm()
-
     return render(request, 'restaurants/restaurant_form.html', {'restaurant_form': restaurant_form})
 
 
@@ -191,7 +188,6 @@ def list_favorites(request):
     print("hello")
     fav = Favorite.objects.get(user=request.user)
     all = fav.restaurant_set.all()
-    # all = Restaurant.objects.get(id = )
     return render(request, 'favourites/index.html', {'all': all})
 
 
@@ -207,10 +203,6 @@ def unassoc_fav(request, restaurant_id):
     Restaurant.objects.get(id=restaurant_id).favorites.remove(fav.id)
     return redirect('favorites')
 
-# def unassoc_fav(request, restaurant_id):
-#     Restaurant.objects.get(id=restaurant_id).favorites.delete(fav_id)
-#     return redirect('favorites')
-#     # return render(request, 'restaurant')
 
 ### Review views ###
 
