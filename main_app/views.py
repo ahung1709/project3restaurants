@@ -219,10 +219,29 @@ class FavoriteDelete(LoginRequiredMixin, DeleteView):
     fields = '__all__'
     success_url = '/favorites/'
 
+
     def get_queryset(self):
         queryset = super().get_queryset()
         filter = DeleteView(self.request.GET, queryset)
         return filter.qs
+
+    def delete(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        if self.object.User == request.user:
+            success_url = self.get_success_url()
+            self.object.delete()
+            return http.HttpResponseRedirect(success_url)
+        else:
+            return http.HttpResponseForbidden("Cannot delete other's posts")
+# ok we
+# def favorite_delete(request, favorite_pk):
+#     if request.method == 'POST':
+#         u = User.objects.get(id=request.user.id)
+#         if u == favorite_pk:
+#             u.delete()
+#             # return render(request, 'main_app/favorite_confirm_delete/')
+
 
 
 class UpdateFavorite(LoginRequiredMixin,  UpdateView):
@@ -247,13 +266,14 @@ def add_review(request, restaurant_id):
 @login_required
 def delete_review(request, restaurant_id, review_id):
     url = request.META.get('HTTP_REFERER')
-    if request.method =="POST":
+    if request.method == "POST":
         # delete_review = Review.objects.get()
         delete_review = Review.objects.filter(id=review_id)
         delete_review.delete()
     return redirect(url, restaurant_id=restaurant_id)
 
+
 def detail_review(request):
     # _avg = Restaurant.objects.aggregate(avg=Avg('rating'))
     _avg = Review.objects.aggregate(avg=Avg('rating'))
-    return render(request, 'main_app/restaurant_detail.html', {"avg":_avg})
+    return render(request, 'main_app/restaurant_detail.html', {"avg": _avg})
