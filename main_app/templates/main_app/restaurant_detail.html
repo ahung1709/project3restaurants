@@ -1,6 +1,5 @@
 {% extends 'base_manager.html' %}
 {% block main_content %}
-{% load mathfilters %}
 
 <!-- <h1>Restaurant Detail</h1> -->
 <div class="row m-2">
@@ -47,9 +46,10 @@
     <div class="card-body">
         <table class="table">
             <thead>
+                <h2>Reviews: {{restaurant.review_set.count}}</h2>
                 <tr>
-                    <th>User {{9|div:3}}</th>
-                    <th>Reviews: {{restaurant.review_set.count}}</th>
+                    <th>User</th>
+                    <th>Review</th>
                     <th>Rating {{avg.avg}} </th>
                     <th></th>
                 </tr>
@@ -78,7 +78,9 @@
         <form action="{% url 'add_review' restaurant.id %}" method="post">
             {% csrf_token %}
             {{ review_form.as_p }}
-            <textarea name="content" placeholder="Write a review" rows="3"></textarea>
+            <textarea name="content" placeholder="Write a review" cols="100" rows="3"></textarea>
+            <br>
+            <label>Rating</label>
             <select class="browser-default" name="rating">
                 <option value="1">1</option>
                 <option value="2">2</option>
