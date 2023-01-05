@@ -1,6 +1,5 @@
 {% extends 'base_manager.html' %}
 {% block main_content %}
-{% load mathfilters %}
 
 <!-- <h1>Restaurant Detail</h1> -->
 <div class="row m-2">
@@ -48,7 +47,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>User {{9|div:3}}</th>
+                    <th>User</th>
                     <th>Reviews: {{restaurant.review_set.count}}</th>
                     <th>Rating {{avg.avg}} </th>
                     <th></th>
