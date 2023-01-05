@@ -231,7 +231,7 @@ class FavoriteDelete(LoginRequiredMixin, DeleteView):
             return http.HttpResponseRedirect(success_url)
         else:
             return http.HttpResponseForbidden("Cannot delete other's posts")
-
+# ok we
 # def favorite_delete(request, favorite_pk):
 #     if request.method == 'POST':
 #         u = User.objects.get(id=request.user.id)
@@ -268,13 +268,14 @@ def add_review(request, restaurant_id):
 @login_required
 def delete_review(request, restaurant_id, review_id):
     url = request.META.get('HTTP_REFERER')
-    if request.method =="POST":
+    if request.method == "POST":
         # delete_review = Review.objects.get()
         delete_review = Review.objects.filter(id=review_id)
         delete_review.delete()
     return redirect(url, restaurant_id=restaurant_id)
 
+
 def detail_review(request):
     # _avg = Restaurant.objects.aggregate(avg=Avg('rating'))
     _avg = Review.objects.aggregate(avg=Avg('rating'))
-    return render(request, 'main_app/restaurant_detail.html', {"avg":_avg})
+    return render(request, 'main_app/restaurant_detail.html', {"avg": _avg})
