@@ -32,9 +32,6 @@
                     {% if user.is_authenticated %}
                         <h3>{{ user.username }}</h3>
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
-                      
-                        <a class="nav-link" href="{%url 'favorites'%}">Favorites</a>
-
                         <a class="nav-link" href="{% url 'user_profile' %}">Settings</a>
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                     {% else %}
