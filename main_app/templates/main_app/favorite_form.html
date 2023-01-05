@@ -1,9 +1,7 @@
 {%extends 'favourites/base.html'%} {% block main_content %}
 
-<form action="" method="POST" class="mr">
-  {%csrf_token%} {{form.as_p}}
-
-  <input type="submit" value="Submit" class="btn btn-outline-primary" />
+<form action="" method="POST">{%csrf_token%} {{form.as_p}}
+    <input type="submit" value="Submit" class="btn btn-outline-primary">
 </form>
 
 {%endblock%}
