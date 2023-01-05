@@ -46,11 +46,12 @@
     <div class="card-body">
         <table class="table">
             <thead>
-                <h2>Reviews: {{restaurant.review_set.count}}</h2>
+                <h2>Reviews</h2>
+                <h7>{{avg}}/5 rating based on {{restaurant.review_set.count}} reviews!</h6>
                 <tr>
                     <th>User</th>
                     <th>Review</th>
-                    <th>Rating {{avg.avg}} </th>
+                    <th>Rating</th>
                     <th></th>
                 </tr>
             </thead>
