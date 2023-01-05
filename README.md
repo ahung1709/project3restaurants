@@ -8,16 +8,16 @@
 
 ### Screenshots
 #### Screenshot #1 - Landing page before login
-![Screenshot #1](#)
+![Screenshot #1](https://i.imgur.com/SDe9aXg.png)
 
 #### Screenshot #2 - Landing page after login
-![Screenshot #2](#)
+![Screenshot #2](https://i.imgur.com/qQ48cZi.png)
 
 #### Screenshot #3 - View all published restaurants
-![Screenshot #3](#)
+![Screenshot #3](https://i.imgur.com/Cqy1Zgk.png)
 
 #### Screenshot #4 - View a particular restaurant
-![Screenshot #4](#)
+![Screenshot #4](https://i.imgur.com/Z3PJMVI.png)
 
 ### Technologies Used
 * Web languages
