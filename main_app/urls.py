@@ -47,12 +47,16 @@ urlpatterns = [
 
 
     # favorites
-    path('favorites/', views.ListFavorites.as_view(), name='favorites'),
-    path('restaurants/<int:restaurant_id>/favorites/create/',
-         views.CreateView.as_view(), name='create-favourite'),
+    path('favorites/', views.list_favorites, name='favorites'),
+    #     path('restaurants/<int:restaurant_id>/favorites/create/',
+    #          views.CreateView.as_view(), name='create-favourite'),
 
-    path('restaurants/<int:pk>/favorites/delete/<int:favorite_pk>/',
-         views.FavoriteDelete.as_view(),  name='favorite-delete'),
-    path('restaurants/<int:pk>/favorites/update/<int:favorite_pk>/',
-         views.UpdateFavorite.as_view(), name='favorite-update')
+    #     path('favorites/<int:pk>/', views.favorite_detail, name='favorite-details'),
+    #     path('restaurants/<int:pk>/favorites/delete/<int:favorite_pk>/',
+    #          views.FavoriteDelete.as_view(),  name='favorite-delete'),
+    #     path('restaurants/<int:pk>/favorites/update/<int:favorite_pk>/',
+    #          views.UpdateFavorite.as_view(), name='favorite-update'),
+
+    path('restaurants/<int:restaurant_id>/favorites/',
+         views.assoc_fav, name='associate')
 ]
