@@ -17,7 +17,7 @@ from .forms import UpdateUserForm, UpdateRestaurantForm, ReviewForm
 # from .form import FeedingForm
 from django import forms
 from django.views.generic import ListView
-
+from decimal import Decimal, ROUND_CEILING
 # Create your views here.
 
 ### Home views ###
@@ -47,8 +47,10 @@ def all_restaurants_index(request):
 
 def all_restaurants_detail(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
+    reviews = Review.objects.filter(restaurant=restaurant_id)
+    avg = round(sum(r.rating for r in reviews)/len(reviews), 1)
     # print(restaurant)
-    context = { "restaurant": restaurant, "public_page": True }
+    context = { "restaurant": restaurant, "public_page": True, 'avg':avg }
     review_form = ReviewForm()
     return render(request, 'main_app/restaurant_detail.html', context)
 
@@ -266,7 +268,6 @@ def add_review(request, restaurant_id):
 def delete_review(request, restaurant_id, review_id):
     url = request.META.get('HTTP_REFERER')
     if request.method == "POST":
-        # delete_review = Review.objects.get()
         delete_review = Review.objects.filter(id=review_id)
         delete_review.delete()
     return redirect(url, restaurant_id=restaurant_id)
