@@ -48,7 +48,10 @@ def all_restaurants_index(request):
 def all_restaurants_detail(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     reviews = Review.objects.filter(restaurant=restaurant_id)
-    avg = round(sum(r.rating for r in reviews)/len(reviews), 1)
+    if len(reviews) > 0:
+        avg = round(sum(r.rating for r in reviews)/len(reviews), 1)
+    else:
+        avg = "0"
     # print(restaurant)
     context = { "restaurant": restaurant, "public_page": True, 'avg':avg }
     review_form = ReviewForm()

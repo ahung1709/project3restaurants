@@ -57,6 +57,6 @@ urlpatterns = [
     #     path('restaurants/<int:pk>/favorites/update/<int:favorite_pk>/',
     #          views.UpdateFavorite.as_view(), name='favorite-update'),
 
-    path('restaurants/<int:restaurant_id>/favorites/',
-         views.assoc_fav, name='associate')
+     path('restaurants/<int:restaurant_id>/associate_fav/favorites/',
+         views.assoc_fav, name='associate'),
 ]
