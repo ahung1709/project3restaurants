@@ -39,8 +39,12 @@ def all_restaurants_index(request):
 def all_restaurants_detail(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     reviews = Review.objects.filter(restaurant=restaurant_id)
-    avg = round(sum(r.rating for r in reviews)/len(reviews), 1)
-    context = { "restaurant": restaurant, "public_page": True, 'avg':avg }
+    if len(reviews) > 0:
+        avg = round(sum(r.rating for r in reviews)/len(reviews), 1)
+    else:
+        avg = "0"
+    # print(restaurant)
+    context = {"restaurant": restaurant, "public_page": True, 'avg': avg}
     review_form = ReviewForm()
     return render(request, 'main_app/restaurant_detail.html', context)
 
@@ -195,6 +199,18 @@ def assoc_fav(request, restaurant_id):
     fav = Favorite.objects.get(user=request.user)
     Restaurant.objects.get(id=restaurant_id).favorites.add(fav.id)
     return redirect('favorites')
+
+
+def unassoc_fav(request, restaurant_id):
+    print('h')
+    fav = Favorite.objects.get(user=request.user)
+    Restaurant.objects.get(id=restaurant_id).favorites.remove(fav.id)
+    return redirect('favorites')
+
+# def unassoc_fav(request, restaurant_id):
+#     Restaurant.objects.get(id=restaurant_id).favorites.delete(fav_id)
+#     return redirect('favorites')
+#     # return render(request, 'restaurant')
 
 ### Review views ###
 
