@@ -4,8 +4,48 @@
 <!-- how to find all the  restaurants in that fav  -->
 <div>
   <h2>{{fav}}</h2>
-  <h1>Changing </h1>
-  <p>Chnaged</p>
+  {% for one in each.restaurant.favorite%}
+  <div class="card" style="width: 50rem">
+    <div class="row">
+      <div class="col-md-3 pt-4">
+        <img
+          src="{{ one.profile_pic }}"
+          class="card-img-top"
+          alt="..."
+        />
+      </div>
+      <div class="col-md-9">
+        <div class="card-body">
+          <table class="table table-borderless p-0">
+            <thead>
+              <tr>
+                <th colspan="2">
+                  <h5 class="card-title">{{ one.name }}</h5>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th class="col-md-2"><p class="card-text">Location:</p></th>
+                <td><p class="card-text">{{ one.location }}</p></td>
+              </tr>
+              <tr>
+                <th class="col-md-2">Hours:</th>
+                <td>
+                  <p class="card-text">{{ one.hours|linebreaksbr }}</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <a
+            class="btn btn-success"
+            href="{% url 'all_restaurants_detail' restaurant.id %}"
+            >Detail</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
 </div>
 {% endblock %}
-

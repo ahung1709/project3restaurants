@@ -92,7 +92,8 @@
         </form>
     </div>
     <div>
-        <form action="{%url 'create-favourite' restaurant.id %}"method = 'POST'>
+        <form action="{%url 'associate' restaurant.id %}"method = 'POST'>
+            {%csrf_token%}
         <input type="submit" class="btn btn-outline-primary" value="Add to favorites">
         </form>
     </div>

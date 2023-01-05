@@ -41,14 +41,14 @@ def about(request):
 def all_restaurants_index(request):
     # restaurants = Restaurant.objects.all()
     restaurants = Restaurant.objects.filter(published=True).order_by('id')
-    context = { "restaurants": restaurants, "public_page": True }
+    context = {"restaurants": restaurants, "public_page": True}
     return render(request, 'restaurants/index.html', context)
 
 
 def all_restaurants_detail(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     # print(restaurant)
-    context = { "restaurant": restaurant, "public_page": True }
+    context = {"restaurant": restaurant, "public_page": True}
     review_form = ReviewForm()
     return render(request, 'main_app/restaurant_detail.html', context)
 
@@ -66,6 +66,7 @@ class RestaurantDetail(LoginRequiredMixin, DetailView):
     model = Restaurant
     fields = '__all__'
 
+
 @login_required
 def restaurant_create(request):
     restaurant_form = UpdateRestaurantForm(request.POST)
@@ -81,6 +82,7 @@ def restaurant_create(request):
         restaurant_form = UpdateRestaurantForm()
 
     return render(request, 'restaurants/restaurant_form.html', {'restaurant_form': restaurant_form})
+
 
 @login_required
 def restaurant_update(request, restaurant_id):
@@ -126,6 +128,7 @@ def signup(request):
         if form.is_valid():
             # This will add the user to the database
             user = form.save()
+            Favorite.objects.create(title='Favorites', user=user)
             # This is how we log a user in via code
             login(request, user)
             return redirect('restaurants_index')
@@ -197,58 +200,24 @@ def user_delete_confirm(request):
 def testing(request):
     return render(request, 'testing.html')
 
-
-class ListFavorites(LoginRequiredMixin, ListView):
-    model = Favorite
+# associating restaurant with toys
 
 
-class CreateView(LoginRequiredMixin, CreateView):
-    model = Favorite
-    fields = ['title']
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-    success_url = '/favorites/'
+def list_favorites(request):
+    print("hello")
+    fav = Favorite.objects.get(user=request.user)
+    all = fav.restaurant_set.all()
+    # all = Restaurant.objects.get(id = )
+    return render(request, 'favourites/index.html', {'all': all})
 
 
-class FavoriteDelete(LoginRequiredMixin, DeleteView):
-    model = Favorite
-    fields = '__all__'
-    success_url = '/favorites/'
-
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        filter = DeleteView(self.request.GET, queryset)
-        return filter.qs
-
-    def delete(self, request, *args, **kwargs):
-
-        self.object = self.get_object()
-        if self.object.User == request.user:
-            success_url = self.get_success_url()
-            self.object.delete()
-            return http.HttpResponseRedirect(success_url)
-        else:
-            return http.HttpResponseForbidden("Cannot delete other's posts")
-# ok we
-# def favorite_delete(request, favorite_pk):
-#     if request.method == 'POST':
-#         u = User.objects.get(id=request.user.id)
-#         if u == favorite_pk:
-#             u.delete()
-#             # return render(request, 'main_app/favorite_confirm_delete/')
-
-
-
-class UpdateFavorite(LoginRequiredMixin,  UpdateView):
-    model = Favorite
-    fields = ["title"]
-    success_url = '/favorites/'
+def assoc_fav(request, restaurant_id):
+    fav = Favorite.objects.get(user=request.user)
+    Restaurant.objects.get(id=restaurant_id).favorites.add(fav.id)
+    return redirect('favorites')
 
 ### Review views ###
+
 
 @login_required
 def add_review(request, restaurant_id):
