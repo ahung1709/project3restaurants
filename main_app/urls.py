@@ -28,8 +28,6 @@ urlpatterns = [
          views.add_review, name='add_review'),
     path('restaurants/<int:restaurant_id>/delete_review/<int:review_id>/',
          views.delete_review, name='delete_review'),
-    path('restaurants/<int:restaurant_id>/detail_review/<int:review_id>/',
-         views.detail_review, name='detail_review'),
 
     ### Account routes ###
     path('accounts/signup/', views.signup, name='signup'),
