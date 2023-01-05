@@ -1,5 +1,4 @@
 body {
-  /* background-color: orange; */
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -7,8 +6,6 @@ body {
 
 main {
   flex: 1 0 auto;
-  /* display: grid; */
-  /* grid-template-columns: 1fr 4fr; */
 }
 
 footer.page-footer {
@@ -19,7 +16,6 @@ footer.page-footer {
 div.split-for-sidebar {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  /* height: 88vh; */
   height: 100%;
 }
 

@@ -1,9 +1,6 @@
 from django.urls import path
 from . import views
-# from django.contrib.auth import views as auth_views
-# from .views import ChangePasswordView
 
-# from users.views import ChangePasswordView
 
 urlpatterns = [
     path('', views.front, name='front'),
@@ -41,10 +38,6 @@ urlpatterns = [
          views.ChangePasswordView.as_view(), name='password_change'),
     path('accounts/password_change_done/',
          views.pwd_change_done, name='pwd_change_done'),
-
-    ### Testing routes ###
-    path('testing/', views.testing, name='testing'),
-
 
     # favorites
     path('favorites/', views.list_favorites, name='favorites'),
