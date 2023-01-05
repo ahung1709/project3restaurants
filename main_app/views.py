@@ -5,7 +5,6 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth import logout
-# from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.forms import UserCreationForm
@@ -14,7 +13,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from .models import Restaurant, Favorite, Review
 from .forms import UpdateUserForm, UpdateRestaurantForm, ReviewForm
-# from .form import FeedingForm
 from django import forms
 from django.views.generic import ListView
 from decimal import Decimal, ROUND_CEILING
@@ -26,12 +24,6 @@ from decimal import Decimal, ROUND_CEILING
 def front(request):
     return render(request, 'front.html')
 
-
-def home(request):
-    return render(request, 'home.html')
-    # return HttpResponse('<h1>Hello</h1>')
-
-
 def about(request):
     return render(request, 'about.html')
 
@@ -39,7 +31,6 @@ def about(request):
 
 
 def all_restaurants_index(request):
-    # restaurants = Restaurant.objects.all()
     restaurants = Restaurant.objects.filter(published=True).order_by('id')
     context = {"restaurants": restaurants, "public_page": True}
     return render(request, 'restaurants/index.html', context)
@@ -49,7 +40,6 @@ def all_restaurants_detail(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     reviews = Review.objects.filter(restaurant=restaurant_id)
     avg = round(sum(r.rating for r in reviews)/len(reviews), 1)
-    # print(restaurant)
     context = { "restaurant": restaurant, "public_page": True, 'avg':avg }
     review_form = ReviewForm()
     return render(request, 'main_app/restaurant_detail.html', context)
@@ -106,7 +96,6 @@ def restaurant_update(request, restaurant_id):
         # Get the form instance for the restaurant instance if it is not a POST request
         # (e.g. it is a GET request)
         restaurant_form = UpdateRestaurantForm(instance=restaurant)
-        # print(restaurant_form)
 
     return render(request, 'restaurants/restaurant_form.html', {
         'restaurant': restaurant,
@@ -155,7 +144,6 @@ def user_update(request):
         user_form = UpdateUserForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
-            # message.success(request, 'Your profile is updated successfully')
             return redirect(to='user_profile')
     else:
         user_form = UpdateUserForm(instance=request.user)
@@ -167,9 +155,7 @@ def user_update(request):
 
 class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'users/change_password.html'
-    # success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('pwd_change_done')
-
 
 @login_required
 def pwd_change_done(request):
@@ -183,10 +169,8 @@ def user_delete_confirm(request):
             u = User.objects.get(username=request.user.username)
             u.delete()
             logout(request)
-            # message.success(request, "The user is deleted")
 
         except User.DoesNotExist:
-            # message.error(request, "User does not exist")
             return render(request, 'front.html')
 
         except Exception as e:
@@ -195,12 +179,6 @@ def user_delete_confirm(request):
         return render(request, 'front.html')
 
     return render(request, 'users/user_delete_confirm.html')
-
-### Testing views ###
-
-
-def testing(request):
-    return render(request, 'testing.html')
 
 # associating restaurant with toys
 

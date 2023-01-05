@@ -28,7 +28,6 @@ class Restaurant(models.Model):
 
     def get_absolute_url(self):
         return reverse('restaurants_detail', kwargs={'pk': self.id})
-        # return reverse('restaurants_detail', kwargs={'restaurant_id': self.id})
 
 
 class Review(models.Model):
