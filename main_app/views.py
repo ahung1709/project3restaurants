@@ -23,6 +23,7 @@ from django.views.generic import ListView
 def front(request):
     return render(request, 'front.html')
 
+
 def about(request):
     return render(request, 'about.html')
 
@@ -158,6 +159,7 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'users/change_password.html'
     success_url = reverse_lazy('pwd_change_done')
 
+
 @login_required
 def pwd_change_done(request):
     return render(request, 'users/password_change_done.html')
@@ -184,6 +186,7 @@ def user_delete_confirm(request):
 # associating restaurant with toys
 
 
+@login_required
 def list_favorites(request):
     print("hello")
     fav = Favorite.objects.get(user=request.user)
@@ -191,12 +194,14 @@ def list_favorites(request):
     return render(request, 'favourites/index.html', {'all': all})
 
 
+@login_required
 def assoc_fav(request, restaurant_id):
     fav = Favorite.objects.get(user=request.user)
     Restaurant.objects.get(id=restaurant_id).favorites.add(fav.id)
     return redirect('favorites')
 
 
+@login_required
 def unassoc_fav(request, restaurant_id):
     print('h')
     fav = Favorite.objects.get(user=request.user)
