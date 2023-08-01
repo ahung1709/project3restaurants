@@ -14,10 +14,10 @@
 ![Screenshot #2](https://i.imgur.com/hIujDmk.png)
 
 #### Screenshot #3 - View all published restaurants
-![Screenshot #3](https://i.imgur.com/dsM70P1.png)
+![Screenshot #3](https://i.imgur.com/gGsgCzz.png)
 
 #### Screenshot #4 - View a particular restaurant
-![Screenshot #4](https://i.imgur.com/BlQ556m.png)
+![Screenshot #4](https://i.imgur.com/S9vx49k.png)
 
 ### Technologies Used
 * Web languages
